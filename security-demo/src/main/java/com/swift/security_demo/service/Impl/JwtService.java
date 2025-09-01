@@ -1,10 +1,15 @@
 package com.swift.security_demo.service.Impl;
 import com.swift.security_demo.entity.UserEntity;
+import com.swift.security_demo.exception.AllException;
+import com.swift.security_demo.payload.request.AccessTokenRequest;
+import com.swift.security_demo.payload.response.AccessTokenResponse;
+import com.swift.security_demo.payload.response.ApiResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -81,5 +86,24 @@ public class JwtService {
     public boolean isTokenValid(String token, UserEntity userEntity){
         final String username = extractUsername(token);
         return (username.equals(userEntity.getUsername()) && !isTokenExpired(token));
+    }
+
+    public ApiResponse regenerateAccessToken(AccessTokenRequest accessTokenRequest) {
+        String refreshToken = accessTokenRequest.getRefreshToken();
+        if  (isTokenExpired(refreshToken)) {
+            throw AllException.builder()
+                    .code("JWT004")
+                    .status(HttpStatus.GONE)
+                    .build();
+        }
+        String username = extractUsername(refreshToken);
+        String newAcessToken = generateAccessToken(username);
+        AccessTokenResponse accessTokenResponse = AccessTokenResponse.builder()
+                .username(username)
+                .accessToken(newAcessToken)
+                .refreshToken(refreshToken)
+                .build();
+        return new ApiResponse(accessTokenResponse , true , "Access token regenerated");
+
     }
 }

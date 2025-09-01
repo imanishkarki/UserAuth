@@ -8,7 +8,8 @@ import lombok.Setter;
 @Setter
 @Builder
 public class SignupResponse {
-    private Long id;
+   // private Long id;
+    private String otp;
     private String username;
     private String status;
 }

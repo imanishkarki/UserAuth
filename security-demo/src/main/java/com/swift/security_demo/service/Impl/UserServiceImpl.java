@@ -5,6 +5,8 @@ import com.swift.security_demo.enums.OtpStatusEnum;
 import com.swift.security_demo.enums.UserAccountStatusEnum;
 import com.swift.security_demo.exception.AllException;
 import com.swift.security_demo.payload.request.SignupRequest;
+import com.swift.security_demo.payload.response.ApiResponse;
+import com.swift.security_demo.payload.response.SignupResponse;
 import com.swift.security_demo.repository.OtpRepository;
 import com.swift.security_demo.repository.UserRepository;
 import com.swift.security_demo.service.EmailService;
@@ -18,6 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String register(SignupRequest signupRequest) {
+    public ApiResponse register(SignupRequest signupRequest) {
         String otpNum = ApplicationUtils.generateOTPCode();
 
         Optional<UserEntity> existingUser = userRepository.findByUsername(signupRequest.getUsername());
@@ -65,13 +69,21 @@ public class UserServiceImpl implements UserService {
                     .status(UserAccountStatusEnum.PENDING)
                     .build();
 
+
             // Create OTP and link it to user
             OtpEntity otpEntity = getOtpEntity(otpNum, user);
             user.setOtpEntity(List.of(otpEntity));
+           //emailService.sendOtpEmail(signupRequest.getEmail(), signupRequest.getUsername(), otpNum );
+
             userRepository.save(user);
             otpRepository.save(otpEntity);
-           // emailService.sendOtpEmail(signupRequest.getEmail(), signupRequest.getUsername(), otpNum );
-            return ("User is created and the otp is:  "+otpNum);
+            SignupResponse signupResponse = SignupResponse.builder()
+                    .username(signupRequest.getUsername())
+                    .otp(otpNum)
+                    .status(UserAccountStatusEnum.PENDING.toString())
+                    .build();
+            return new ApiResponse(signupResponse, true, "User successfully created");
+
         }
     }
 
@@ -86,11 +98,10 @@ public class UserServiceImpl implements UserService {
         return otpEntity;
     }
 
-    public String verifyUser(Long id) {
+    public void  verifyUser(Long id) {
         UserEntity user = userRepository.findById(id).get();
         user.setStatus(UserAccountStatusEnum.VERIFIED);
         userRepository.save(user);
-        return "Status changed";
     }
 
 

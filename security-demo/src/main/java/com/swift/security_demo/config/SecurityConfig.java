@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 // Configure URL authorization
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/user/signup", "/api/auth/login",
+                        .requestMatchers("/api/user/signup", "/api/auth/login","/api/auth/access/token",
                                 "/api/auth/access/","/api/user/public/test").permitAll()
                         .anyRequest().authenticated())
                         .exceptionHandling(exception -> exception.authenticationEntryPoint(customAuthEntryPoint)

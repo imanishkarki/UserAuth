@@ -5,13 +5,9 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class LoginResponse {
 
+public class AccessTokenResponse {
     private String username;
-    private String status;
     private String accessToken;
     private String refreshToken;
-
 }

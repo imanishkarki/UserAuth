@@ -1,6 +1,7 @@
 package com.swift.security_demo.controller;
 import com.swift.security_demo.payload.request.OtpVerificationRequest;
 import com.swift.security_demo.payload.request.SignupRequest;
+import com.swift.security_demo.payload.response.ApiResponse;
 import com.swift.security_demo.service.Impl.OtpServiceImpl;
 import com.swift.security_demo.service.UserService;
 import jakarta.validation.Valid;
@@ -20,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String>  register(@Valid @RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<ApiResponse>  register(@Valid @RequestBody SignupRequest signupRequest) {
         //userService.register(signupRequest);
         return ResponseEntity.ok(userService.register(signupRequest));
     }
@@ -31,12 +32,12 @@ public class UserController {
 //    }
 
     @PutMapping("/verify/otp")
-    public ResponseEntity<String> verifyOtp(@RequestBody OtpVerificationRequest otpVerificationRequest) {
+    public ResponseEntity<ApiResponse> verifyOtp(@RequestBody OtpVerificationRequest otpVerificationRequest) {
         return ResponseEntity.ok(otpService.verifyOtp( otpVerificationRequest));
     }
 
     @GetMapping("/resend/otp")
-    public ResponseEntity<String> resendOtp() {
+    public ResponseEntity<ApiResponse> resendOtp() {
         return  ResponseEntity.ok(otpService.resendOtp());
 
     }

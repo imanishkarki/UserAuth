@@ -1,8 +1,11 @@
 package com.swift.security_demo.controller;
+import com.swift.security_demo.payload.request.AccessTokenRequest;
 import com.swift.security_demo.payload.request.LoginRequest;
+import com.swift.security_demo.payload.response.ApiResponse;
 import com.swift.security_demo.service.AuthService;
 import com.swift.security_demo.service.Impl.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,18 +16,13 @@ public class AuthController {
     private final JwtService jwtService;
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest  loginRequest){
-
-        return authService.login(loginRequest);
+    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest  loginRequest){
+        return ResponseEntity.ok(authService.login(loginRequest));
     }
 
     @PostMapping("/access/token")
-    public String regenerateAccessToken(@RequestParam String refreshToken) {
-        if  (!jwtService.isTokenExpired(refreshToken)) {
-            return "expired token";// exception handling left
-        }
-        String username = jwtService.extractUsername(refreshToken);
-        String newAcessToken = jwtService.generateAccessToken(username);
-        return "new access token: " + newAcessToken;
+    public ResponseEntity<ApiResponse> regenerateAccessToken(@RequestBody AccessTokenRequest accessTokenRequest) {
+        return ResponseEntity.ok(jwtService.regenerateAccessToken(accessTokenRequest));
+
     }
 }

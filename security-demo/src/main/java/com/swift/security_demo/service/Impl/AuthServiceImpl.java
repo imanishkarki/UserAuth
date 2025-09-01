@@ -4,6 +4,8 @@ import com.swift.security_demo.entity.UserEntity;
 import com.swift.security_demo.enums.UserAccountStatusEnum;
 import com.swift.security_demo.exception.AllException;
 import com.swift.security_demo.payload.request.LoginRequest;
+import com.swift.security_demo.payload.response.ApiResponse;
+import com.swift.security_demo.payload.response.LoginResponse;
 import com.swift.security_demo.repository.UserRepository;
 import com.swift.security_demo.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
 
     @Override
-    public String login(LoginRequest loginRequest) {
+    public ApiResponse login(LoginRequest loginRequest) {
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
         // Load the authenticated user
@@ -36,7 +38,13 @@ public class AuthServiceImpl implements AuthService {
             String refreshToken = jwtService.generateRefreshToken(user.getUsername());
 
             //return ResponseEntity.ok(new LoginResponse(accessToken, refreshToken));
-            return "Login in success!!" + "\n  access token: " + accessToken + "\n  refresh token: " + refreshToken;
+            LoginResponse loginResponse = LoginResponse.builder()
+                    .username(user.getUsername())
+                    .status(user.getStatus().toString())
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .build();
+            return new ApiResponse (loginResponse, true,"Login Success");
         }else{
             throw AllException.builder()
                     .code("IDE03")

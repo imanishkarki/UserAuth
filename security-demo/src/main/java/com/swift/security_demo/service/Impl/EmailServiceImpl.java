@@ -1,6 +1,5 @@
 package com.swift.security_demo.service.Impl;
 
-import com.swift.security_demo.exception.AllException;
 import com.swift.security_demo.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -34,7 +33,7 @@ public class EmailServiceImpl implements EmailService {
         context.setVariable("username", username);
         context.setVariable("otp", otp);
 
-        String htmlContent = templateEngine.process("otp-email", context);
+        String htmlContent = templateEngine.process("EmailTemplate", context);
 
         sendHtmlEmail(to, "Your OTP Code", htmlContent);
     }
