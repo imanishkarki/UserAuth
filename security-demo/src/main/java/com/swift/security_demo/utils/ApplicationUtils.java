@@ -18,15 +18,13 @@ public class ApplicationUtils {
 
 
 
-
-
     public static UserEntity getCurrentUser() {
         Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authenticate.getPrincipal();
         if (principal instanceof UserEntity userEntity) {
             return userEntity;
         } else {
-            throw new RuntimeException("Authenticated user is not of type UserEntity");
+            throw new RuntimeException("Authenticated user is not of type UserEntity");//
         }
 //        if (principal instanceof UserEntity) {
 //            return (UserEntity) principal;

@@ -1,5 +1,6 @@
 package com.swift.security_demo.payload.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -7,15 +8,15 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-
 public class SignupRequest {
     private Long id;
+    @Schema(description = "The name of the User")
     private String name;
     private String phoneNumber;
     @Email
     @NotBlank
     private String email;
     private String username;
-    private String password;
+    private char[] password;
 
 }

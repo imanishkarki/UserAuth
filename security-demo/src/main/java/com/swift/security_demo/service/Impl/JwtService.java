@@ -1,6 +1,6 @@
 package com.swift.security_demo.service.Impl;
 import com.swift.security_demo.entity.UserEntity;
-import com.swift.security_demo.exception.AllException;
+import com.swift.security_demo.exception.BaseException;
 import com.swift.security_demo.payload.request.AccessTokenRequest;
 import com.swift.security_demo.payload.response.AccessTokenResponse;
 import com.swift.security_demo.payload.response.ApiResponse;
@@ -91,7 +91,7 @@ public class JwtService {
     public ApiResponse regenerateAccessToken(AccessTokenRequest accessTokenRequest) {
         String refreshToken = accessTokenRequest.getRefreshToken();
         if  (isTokenExpired(refreshToken)) {
-            throw AllException.builder()
+            throw BaseException.builder()
                     .code("JWT004")
                     .status(HttpStatus.GONE)
                     .build();

@@ -1,5 +1,6 @@
 package com.swift.security_demo.entity;
 import com.swift.security_demo.enums.OtpStatusEnum;
+import com.swift.security_demo.enums.OtpTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,11 +33,14 @@ public class OtpEntity {
     @Enumerated(EnumType.STRING)
     private OtpStatusEnum status;
 
+    @Enumerated(EnumType.STRING)
+    private OtpTypeEnum otpType;
 
-    public boolean isExpired(){
-        return LocalDateTime.now().isAfter(this.expiresAt)||this.status == OtpStatusEnum.EXPIRED;
-    }
-    public void markExpired(){
-        this.status = OtpStatusEnum.EXPIRED;
-    }
+
+//    public boolean isExpired(){
+//        return LocalDateTime.now().isAfter(this.expiresAt)||this.status == OtpStatusEnum.EXPIRED;
+//    }
+//    public void markExpired(){
+//        this.status = OtpStatusEnum.EXPIRED;
+//    }
 }

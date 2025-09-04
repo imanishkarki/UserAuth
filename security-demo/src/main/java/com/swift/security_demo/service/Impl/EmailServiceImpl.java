@@ -17,17 +17,8 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
 
-//    @Async
-//    public void sendEmail(String to, String subject, String body) {
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setTo(to);
-//        message.setSubject("Email verification");
-//        message.setText("Your email verification OTP code is: "+ body);
-//        mailSender.send(message);
-//    }
-
     @Async  // Optional: for async sending
-    public void sendOtpEmail(String to, String username, String otp) {
+    public void sendOtpEmail(String to, String username, String otp) throws MessagingException {
 
         Context context = new Context();
         context.setVariable("username", username);
@@ -38,7 +29,7 @@ public class EmailServiceImpl implements EmailService {
         sendHtmlEmail(to, "Your OTP Code", htmlContent);
     }
 
-    private void sendHtmlEmail(String to, String subject, String htmlBody) {
+    private void sendHtmlEmail(String to, String subject, String htmlBody) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
@@ -49,7 +40,8 @@ public class EmailServiceImpl implements EmailService {
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             // Handle exception (logging, retry, etc.)
-            e.printStackTrace();
+            //e.printStackTrace();
+          //  throw e;
         }
     }
 }

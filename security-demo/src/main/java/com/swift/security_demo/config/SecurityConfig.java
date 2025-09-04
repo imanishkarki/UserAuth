@@ -36,7 +36,10 @@ public class SecurityConfig {
                 // Configure URL authorization
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/user/signup", "/api/auth/login","/api/auth/access/token",
-                                "/api/auth/access/","/api/user/public/test").permitAll()
+                                "/api/auth/access/","/api/auth/forgot/password","/api/auth/verify/password/otp",  "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html")
+                        .permitAll()
                         .anyRequest().authenticated())
                         .exceptionHandling(exception -> exception.authenticationEntryPoint(customAuthEntryPoint)
                                 .accessDeniedHandler(customAuthEntryPoint)
@@ -63,4 +66,4 @@ public class SecurityConfig {
         return daoAuthenticationProvider;
     }
 
- }
+}

@@ -1,6 +1,6 @@
 package com.swift.security_demo.exception.handler;
 
-import com.swift.security_demo.exception.AllException;
+import com.swift.security_demo.exception.BaseException;
 import com.swift.security_demo.utils.ErrorCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
     private final ErrorCodeService errorCodeService;
 
-    @ExceptionHandler(AllException.class)
-    public ResponseEntity<ErrorResponse> allExceptionHandler(AllException e) {
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<ErrorResponse> allExceptionHandler(BaseException e) {
         ErrorResponse erp = new ErrorResponse(
                 errorCodeService.getMessage(e.getCode()),
                 e.getCode(),

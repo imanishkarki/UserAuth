@@ -5,7 +5,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class OtpResendResponse {
+public class OtpResponse {
     private Long id;
     private String username;
     private String otp;

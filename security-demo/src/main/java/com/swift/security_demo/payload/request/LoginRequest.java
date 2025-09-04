@@ -14,5 +14,5 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class LoginRequest {
     private String username;
-    private String password;
+    private char[] password;
 }
